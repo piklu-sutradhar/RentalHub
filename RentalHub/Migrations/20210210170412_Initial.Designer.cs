@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalHub.Entities;
 
 namespace RentalHub.Migrations
 {
     [DbContext(typeof(RentalHubContext))]
-    partial class RentalHubContextModelSnapshot : ModelSnapshot
+    [Migration("20210210170412_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,38 +207,6 @@ namespace RentalHub.Migrations
                             PostalCode = "Test code",
                             Province = "Test Pro"
                         });
-                });
-
-            modelBuilder.Entity("RentalHub.Entities.Profile", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AddressId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AdressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdressId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Property", b =>
@@ -535,12 +505,12 @@ namespace RentalHub.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b52cf716-e1a4-4392-bfae-9dce1aa8ae76",
+                            ConcurrencyStamp = "ecb8f388-cbfb-4f09-8a85-d36ab253413c",
                             Email = "Piklu@yahoo.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ffab7035-dcfa-4671-866f-5381306f47b7",
+                            SecurityStamp = "c91ddee8-c845-4b13-a46b-4ab85a1e86f1",
                             TwoFactorEnabled = false,
                             UserName = "test"
                         });
@@ -595,23 +565,6 @@ namespace RentalHub.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("RentalHub.Entities.Profile", b =>
-                {
-                    b.HasOne("RentalHub.Entities.Address", "Adress")
-                        .WithMany()
-                        .HasForeignKey("AdressId");
-
-                    b.HasOne("RentalHub.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Adress");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Property", b =>

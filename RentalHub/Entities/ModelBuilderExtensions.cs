@@ -53,7 +53,7 @@ namespace RentalHub.Entities
             };
 
             modelBuilder.Entity<User>().HasData(
-                new User { Id=1, FirstName = "Piklu", LastName = "Sutradhar", Email = "Piklu@yahoo.com",UserName="test", Password = "1234"}
+                new User { Id="1", Email = "Piklu@yahoo.com",UserName="test"}
             );
 
             modelBuilder.Entity<Address>().HasData(

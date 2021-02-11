@@ -15,7 +15,11 @@
       "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "RentalHubConnectionString": "Server=(LocalDb)\\localDB;Data Source=(LocalDb)\\localDB;Initial Catalog=RentalHub;Integrated Security=SSPI;"
+        "RentalHubConnectionString": "Server=(LocalDb)\\localDB;Data Source=(LocalDb)\\localDB;Initial Catalog=RentalHub;Integrated Security=SSPI;",
+        "JwtValidAudience": "User",
+        "JwtValidIssuer": "https://localhost:44359",
+        "JwtSecret": "ThisIs4SecretKey"
+
       }
     },
     "RentalHub": {

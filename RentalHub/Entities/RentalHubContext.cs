@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RentalHub.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace RentalHub.Entities
 {
-    public class RentalHubContext : DbContext
+    public class RentalHubContext : IdentityDbContext<User>
     {
         public RentalHubContext()
         {
@@ -22,7 +24,8 @@ namespace RentalHub.Entities
         public DbSet<Rentee> Rentees { get; set; }
         public DbSet<Property> Properties { get; set; }
         public DbSet<Address> Adresses { get; set; }
-        public DbSet<RentalHub.Entities.User> User { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,6 +43,7 @@ namespace RentalHub.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasIndex(u => u.Email);
             modelBuilder.Entity<User>().HasAlternateKey(u => u.UserName);
             modelBuilder.Seed();
