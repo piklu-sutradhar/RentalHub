@@ -18,7 +18,7 @@ namespace RentalHub.Entities
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public string AddressId { get; set; }
-        public Address Adress { get; set; }
+        public int? AddressId { get; set; }
+        public Address Address { get; set; }
     }
 }

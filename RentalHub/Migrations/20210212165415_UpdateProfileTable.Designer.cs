@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalHub.Entities;
 
 namespace RentalHub.Migrations
 {
     [DbContext(typeof(RentalHubContext))]
-    partial class RentalHubContextModelSnapshot : ModelSnapshot
+    [Migration("20210212165415_UpdateProfileTable")]
+    partial class UpdateProfileTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,7 +214,7 @@ namespace RentalHub.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -532,12 +534,12 @@ namespace RentalHub.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "568aff67-b4d3-420f-a1ae-c973288b486f",
+                            ConcurrencyStamp = "6e3b91bc-d819-413d-a1f0-feb74e6c4a95",
                             Email = "Piklu@yahoo.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b00f02ca-2845-4028-a84e-314424bdae3e",
+                            SecurityStamp = "96e69138-8796-48af-8ed0-f9a3de46c42d",
                             TwoFactorEnabled = false,
                             UserName = "test"
                         });
@@ -598,7 +600,9 @@ namespace RentalHub.Migrations
                 {
                     b.HasOne("RentalHub.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("RentalHub.Entities.User", "User")
                         .WithMany()

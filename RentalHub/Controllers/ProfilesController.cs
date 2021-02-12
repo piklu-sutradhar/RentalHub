@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentalHub.Entities;
@@ -14,20 +15,29 @@ namespace RentalHub.Controllers
     [ApiController]
     public class ProfilesController : ControllerBase
     {
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly RentalHubContext _context;
-
-        public ProfilesController(RentalHubContext context)
+        public ProfilesController(RentalHubContext context,UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
-
+        [Authorize]
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateProfile([FromBody] Profile model)
+        {
+            return Ok();
+        }
         // GET: api/Profiles/5
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profile>> GetProfile(string id)
+        public async Task<ActionResult<Profile>> GetProfile(string userId)
         {
-            var profile = await _context.Profiles.FindAsync(id);
+            var profile = await _context.Profiles.Include(p => p.Address).Where(p => p.UserId == userId).FirstOrDefaultAsync();
 
             if (profile == null)
             {

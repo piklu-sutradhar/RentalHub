@@ -21,12 +21,14 @@ namespace RentalHub.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly RentalHubContext _context;
 
-        public AuthenticationController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticationController(RentalHubContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpPost]
@@ -54,6 +56,17 @@ namespace RentalHub.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation has failed" });
             }
 
+            Profile profile = new Profile
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                User = await _userManager.FindByNameAsync(model.UserName),
+                Address = null
+            };
+
+            _context.Profiles.Add(profile);
+            await _context.SaveChangesAsync();
             return Ok(new Response { Status = "Success", Message = "Succesfully created the user"});
         }
 
