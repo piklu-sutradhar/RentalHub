@@ -10,8 +10,8 @@ using RentalHub.Entities;
 namespace RentalHub.Migrations
 {
     [DbContext(typeof(RentalHubContext))]
-    [Migration("20210212165415_UpdateProfileTable")]
-    partial class UpdateProfileTable
+    [Migration("20210219165445_CreateDatabase")]
+    partial class CreateDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,10 +154,8 @@ namespace RentalHub.Migrations
 
             modelBuilder.Entity("RentalHub.Entities.Address", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AddressLine1")
                         .IsRequired()
@@ -189,7 +187,7 @@ namespace RentalHub.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = "8fb04a10-92c2-4633-9445-f02728a84906",
                             AddressLine1 = "William",
                             AddressLine2 = "Shakespeare",
                             City = "Test City",
@@ -199,7 +197,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = 2,
+                            Id = "b6d09d14-ddc9-4603-a804-3f724f182d10",
                             AddressLine1 = "William",
                             AddressLine2 = "Shakespeare",
                             City = "Test City",
@@ -214,8 +212,11 @@ namespace RentalHub.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressId")
+                    b.Property<int?>("AddressId")
                         .HasColumnType("int");
+
+                    b.Property<string>("AddressId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -231,7 +232,7 @@ namespace RentalHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId1");
 
                     b.HasIndex("UserId");
 
@@ -240,10 +241,8 @@ namespace RentalHub.Migrations
 
             modelBuilder.Entity("RentalHub.Entities.Property", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
@@ -257,11 +256,14 @@ namespace RentalHub.Migrations
                     b.Property<int>("BedRooms")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RenteeId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RenterId")
-                        .HasColumnType("int");
+                    b.Property<string>("PropertyAddressId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RenterId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -271,9 +273,9 @@ namespace RentalHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("ProfileId");
 
-                    b.HasIndex("RenteeId");
+                    b.HasIndex("PropertyAddressId");
 
                     b.HasIndex("RenterId");
 
@@ -282,80 +284,71 @@ namespace RentalHub.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = "a6ead585-4c16-42c7-876d-cfd3c6d3e574",
                             AddressId = 1,
                             Available = false,
                             Baths = 1,
                             BedRooms = 2,
-                            RenteeId = 1,
-                            RenterId = 1,
                             Title = "Rancho Property",
                             Type = 0
                         },
                         new
                         {
-                            Id = 2,
+                            Id = "30221311-646c-40ed-9124-44928e710134",
                             AddressId = 2,
                             Available = false,
                             Baths = 2,
                             BedRooms = 3,
-                            RenteeId = 2,
-                            RenterId = 1,
                             Title = "Succex Property",
                             Type = 1
                         },
                         new
                         {
-                            Id = 3,
+                            Id = "7f091dfc-e17a-4360-9a63-d9dfe3c06370",
                             AddressId = 1,
                             Available = true,
                             Baths = 1,
                             BedRooms = 1,
-                            RenterId = 1,
                             Title = "Globe Property",
                             Type = 0
                         },
                         new
                         {
-                            Id = 4,
+                            Id = "981b8062-4c76-4a68-8763-32fc876adfa3",
                             AddressId = 1,
                             Available = true,
                             Baths = 3,
                             BedRooms = 5,
-                            RenterId = 1,
                             Title = "Private Property",
                             Type = 3
                         },
                         new
                         {
-                            Id = 5,
+                            Id = "edbfafc2-f462-45ed-86e7-155339aace60",
                             AddressId = 1,
                             Available = true,
                             Baths = 1,
                             BedRooms = 2,
-                            RenterId = 1,
                             Title = "Public Property",
                             Type = 0
                         },
                         new
                         {
-                            Id = 6,
+                            Id = "24020ee8-7b8c-4dfe-b04c-7a7bebfbca41",
                             AddressId = 1,
                             Available = true,
                             Baths = 2,
                             BedRooms = 4,
-                            RenterId = 1,
                             Title = "Rancho Property",
                             Type = 2
                         },
                         new
                         {
-                            Id = 7,
+                            Id = "524680d1-29e1-4f69-b9d6-bde17e19466a",
                             AddressId = 1,
                             Available = true,
                             Baths = 1,
                             BedRooms = 2,
-                            RenterId = 1,
                             Title = "Rancho Property",
                             Type = 0
                         });
@@ -371,6 +364,9 @@ namespace RentalHub.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AddressId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -388,76 +384,24 @@ namespace RentalHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("AddressId1");
 
                     b.ToTable("Rentees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddressId = 1,
-                            Email = "p@test.com",
-                            FirstName = "piklu",
-                            LastName = "Hamlet"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddressId = 2,
-                            Email = "p@test.com",
-                            FirstName = "Rubel",
-                            LastName = "Hamlet"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AddressId = 1,
-                            Email = "p@test.com",
-                            FirstName = "Mou",
-                            LastName = "Hamlet"
-                        });
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Renter", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ProfileID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("ProfileID");
 
                     b.ToTable("Renters");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddressId = 1,
-                            FirstName = "Adam",
-                            LastName = "John"
-                        });
                 });
 
             modelBuilder.Entity("RentalHub.Entities.User", b =>
@@ -528,21 +472,6 @@ namespace RentalHub.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e3b91bc-d819-413d-a1f0-feb74e6c4a95",
-                            Email = "Piklu@yahoo.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "96e69138-8796-48af-8ed0-f9a3de46c42d",
-                            TwoFactorEnabled = false,
-                            UserName = "test"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -600,9 +529,7 @@ namespace RentalHub.Migrations
                 {
                     b.HasOne("RentalHub.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId1");
 
                     b.HasOne("RentalHub.Entities.User", "User")
                         .WithMany()
@@ -617,25 +544,21 @@ namespace RentalHub.Migrations
 
             modelBuilder.Entity("RentalHub.Entities.Property", b =>
                 {
+                    b.HasOne("RentalHub.Entities.Profile", "Rentee")
+                        .WithMany()
+                        .HasForeignKey("ProfileId");
+
                     b.HasOne("RentalHub.Entities.Address", "PropertyAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RentalHub.Entities.Rentee", "CurrentRentee")
-                        .WithMany()
-                        .HasForeignKey("RenteeId");
+                        .HasForeignKey("PropertyAddressId");
 
                     b.HasOne("RentalHub.Entities.Renter", "Renter")
                         .WithMany("Properties")
-                        .HasForeignKey("RenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CurrentRentee");
+                        .HasForeignKey("RenterId");
 
                     b.Navigation("PropertyAddress");
+
+                    b.Navigation("Rentee");
 
                     b.Navigation("Renter");
                 });
@@ -644,22 +567,18 @@ namespace RentalHub.Migrations
                 {
                     b.HasOne("RentalHub.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddressId1");
 
                     b.Navigation("Address");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Renter", b =>
                 {
-                    b.HasOne("RentalHub.Entities.Address", "Address")
+                    b.HasOne("RentalHub.Entities.Profile", "Profile")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProfileID");
 
-                    b.Navigation("Address");
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Renter", b =>

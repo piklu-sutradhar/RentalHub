@@ -61,10 +61,11 @@ namespace RentalHub
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters()
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidAudience = Environment.GetEnvironmentVariable("JwtValidAudience"),
-                        ValidIssuer = Environment.GetEnvironmentVariable("JwtValidIssuer"),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateIssuerSigningKey = true,
+                        //ValidAudience = Environment.GetEnvironmentVariable("JwtValidAudience"),
+                        //ValidIssuer = Environment.GetEnvironmentVariable("JwtValidIssuer"),
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JwtSecret")))
                     };
                 });

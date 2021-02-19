@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentalHub.Entities;
+using RentalHub.Models;
 
 namespace RentalHub.Controllers
 {
+    [Authorize(Roles = "Renter")]
     [Route("api/[controller]")]
     [ApiController]
     public class RentersController : ControllerBase
@@ -21,33 +24,80 @@ namespace RentalHub.Controllers
         }
 
         // GET: api/Renters
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<Renter>>> GetRenters()
         {
-            return await _context.Renters.Include(r => r.Address).Include(r=>r.Properties).ToListAsync();
-        }
+            return await _context.Renters.Include(r => r.Profile).Include(r=>r.Properties).ToListAsync();
+        }*/
 
         // GET: api/Renters/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Renter>> GetRenter(int id)
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<Renter>> GetRenter(string userId)
         {
-            var renter = await _context.Renters.Include(r => r.Address).Include(r => r.Properties).Where(r => r.Id == id).FirstOrDefaultAsync();
+            var renter = await _context.Renters.Include(r => r.Properties).Where(r => r.Profile.User.Id == userId).FirstOrDefaultAsync();
 
             if (renter == null)
             {
                 return NotFound();
             }
-            //renter.Address = await _context.Adresses.FindAsync(id);
-            //renter.Properties = await _context.Properties.Where(p => p.RenterId == renter.Id).ToListAsync();
 
+            foreach(var property in renter.Properties)
+            {
+                if(property.ProfileId != null)
+                    property.Rentee = await _context.Profiles.FindAsync(property.ProfileId);
+            }
             return renter;
+        }
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult> AddProperty(string id, PropertyViewModel model)
+        {
+            var renter = await _context.Renters.FindAsync(id);
+
+            if (renter == null)
+            {
+                return NotFound("The renter is invalid");
+            }
+
+            Property property = new Property {
+                Id = Guid.NewGuid().ToString(),
+                Title = model.Title,
+                Type = model.Type,
+                BedRooms = model.BedRooms,
+                Baths = model.Baths,
+                Available = model.Available,
+                Renter = renter
+            };
+
+            _context.Properties.Add(property);
+            await _context.SaveChangesAsync();
+
+            return Ok("property added");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> RemoveRenterProperty(string id, string propertyId)
+        {
+            var renter = await _context.Renters.FindAsync(id);
+
+            if (renter == null)
+            {
+                return NotFound("The renter is invalid");
+            }
+
+            var property = await _context.Properties.FindAsync(propertyId);
+            if(property != null)
+                _context.Properties.Remove(property);
+            await _context.SaveChangesAsync();
+
+            return Ok("property removed");
         }
 
         // PUT: api/Renters/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRenter(int id, Renter renter)
+        public async Task<IActionResult> PutRenter(string id, Renter renter)
         {
             if (id != renter.Id)
             {
@@ -88,7 +138,7 @@ namespace RentalHub.Controllers
         }
 
         // DELETE: api/Renters/5
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         public async Task<ActionResult<Renter>> DeleteRenter(int id)
         {
             var renter = await _context.Renters.FindAsync(id);
@@ -101,9 +151,9 @@ namespace RentalHub.Controllers
             await _context.SaveChangesAsync();
 
             return renter;
-        }
+        }*/
 
-        private bool RenterExists(int id)
+        private bool RenterExists(string id)
         {
             return _context.Renters.Any(e => e.Id == id);
         }

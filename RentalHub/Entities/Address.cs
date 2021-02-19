@@ -9,7 +9,7 @@ namespace RentalHub.Entities
     public class Address
     {
         [Key]
-        public int Id { set; get; }
+        public string Id { set; get; }
         [Required]
         public string AddressLine1 { set; get; }
         public string AddressLine2 { set; get; }

@@ -26,12 +26,18 @@ namespace RentalHub.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
         {
-            return await _context.Properties.Include(r => r.PropertyAddress).ToListAsync();
+            return await _context.Properties.Include(r => r.PropertyAddress).Include(r => r.Renter).ToListAsync();
         }
+
+        /*[HttpGet]
+        public async Task<ActionResult<IEnumerable<Property>>> GetPropertiesOfRenter(int renterId)
+        {
+            return await _context.Properties.Include(r => r.PropertyAddress).Include(p => p.CurrentRentee).Where(p=> p.RenterId == renterId).ToListAsync();
+        }*/
 
         // GET: api/Properties/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Property>> GetProperty(int id)
+        public async Task<ActionResult<Property>> GetProperty(string id)
         {
             var @property = await _context.Properties.Include(p => p.PropertyAddress).Where(p => p.Id == id).FirstOrDefaultAsync();
 
@@ -47,7 +53,7 @@ namespace RentalHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProperty(int id, Property @property)
+        public async Task<IActionResult> PutProperty(string id, Property @property)
         {
             if (id != @property.Id)
             {
@@ -103,7 +109,7 @@ namespace RentalHub.Controllers
             return @property;
         }
 
-        private bool PropertyExists(int id)
+        private bool PropertyExists(string id)
         {
             return _context.Properties.Any(e => e.Id == id);
         }

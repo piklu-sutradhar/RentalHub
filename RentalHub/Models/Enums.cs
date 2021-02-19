@@ -20,5 +20,10 @@ namespace RentalHub.Models
             Townhouse,
             House
         }
+        public enum UserTypes
+        {
+            Renter,
+            Rentee
+        }
     //}
 }

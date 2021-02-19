@@ -34,10 +34,10 @@ namespace RentalHub.Controllers
         }
         // GET: api/Profiles/5
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("{userId}")]
         public async Task<ActionResult<Profile>> GetProfile(string userId)
         {
-            var profile = await _context.Profiles.Include(p => p.Address).Where(p => p.UserId == userId).FirstOrDefaultAsync();
+            var profile = await _context.Profiles.Include(p => p.Address).Include(p => p.User).Where(p => p.UserId == userId).FirstOrDefaultAsync();
 
             if (profile == null)
             {
@@ -117,9 +117,17 @@ namespace RentalHub.Controllers
             {
                 return NotFound();
             }
-
             _context.Profiles.Remove(profile);
             await _context.SaveChangesAsync();
+
+            var renter = await _context.Renters.Where(r => r.ProfileID == profile.Id).FirstOrDefaultAsync();
+            if(renter != null)
+            {
+                _context.Renters.Remove(renter);
+                await _context.SaveChangesAsync();
+            }
+            var user = await _userManager.FindByIdAsync(profile.UserId);
+            await _userManager.DeleteAsync(user);
 
             return profile;
         }
