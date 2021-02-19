@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentalHub.Entities;
+using RentalHub.Models;
 
 namespace RentalHub.Controllers
 {
@@ -35,7 +36,7 @@ namespace RentalHub.Controllers
         // GET: api/Profiles/5
         [Authorize]
         [HttpGet("{userId}")]
-        public async Task<ActionResult<Profile>> GetProfile(string userId)
+        public async Task<ActionResult<ProfileViewModel>> GetProfile(string userId)
         {
             var profile = await _context.Profiles.Include(p => p.Address).Include(p => p.User).Where(p => p.UserId == userId).FirstOrDefaultAsync();
 
@@ -44,7 +45,21 @@ namespace RentalHub.Controllers
                 return NotFound();
             }
 
-            return profile;
+
+
+            return  new ProfileViewModel
+            {
+                Id = profile.Id,
+                FirstName = profile.FirstName,
+                LastName = profile.LastName,
+                Email = profile.User.Email,
+                AddressLine1 = profile.Address?.AddressLine1,
+                AddressLine2 = profile.Address?.AddressLine2,
+                City = profile.Address?.City,
+                Province = profile.Address?.Province,
+                Country = profile.Address?.Country,
+                PostalCode = profile.Address?.PostalCode
+            };
         }
 
         // PUT: api/Profiles/5
