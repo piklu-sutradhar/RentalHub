@@ -26,7 +26,7 @@ namespace RentalHub.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
         {
-            return await _context.Properties.Include(r => r.PropertyAddress).Include(r => r.Renter).ToListAsync();
+            return await _context.Properties.Include(r => r.Address).Include(r => r.Renter).ToListAsync();
         }
 
         /*[HttpGet]
@@ -39,7 +39,7 @@ namespace RentalHub.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(string id)
         {
-            var @property = await _context.Properties.Include(p => p.PropertyAddress).Where(p => p.Id == id).FirstOrDefaultAsync();
+            var @property = await _context.Properties.Include(p => p.Address).Where(p => p.Id == id).FirstOrDefaultAsync();
 
             if (@property == null)
             {

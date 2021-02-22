@@ -21,7 +21,7 @@ namespace RentalHub.Entities
         public int BedRooms { get; set; }
         public int Baths { get; set; }
         public string AddressId { get; set; }
-        public Address PropertyAddress { get; set; }
+        public Address Address { get; set; }
         public bool Available { get; set; }
     }
 }

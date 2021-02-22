@@ -59,6 +59,20 @@ namespace RentalHub.Controllers
                 return NotFound("The renter is invalid");
             }
 
+            var address = new Address
+            {
+                Id = Guid.NewGuid().ToString(),
+                AddressLine1 = model.AddressLine1,
+                AddressLine2 = model.AddressLine2,
+                City = model.City,
+                Province = model.Province,
+                Country = model.Country,
+                PostalCode = model.PostalCode
+            };
+
+            _context.Addresses.Add(address);
+            await _context.SaveChangesAsync();
+
             Property property = new Property {
                 Id = Guid.NewGuid().ToString(),
                 Title = model.Title,
@@ -66,7 +80,8 @@ namespace RentalHub.Controllers
                 BedRooms = model.BedRooms,
                 Baths = model.Baths,
                 Available = model.Available,
-                Renter = renter
+                Renter = renter,
+                Address = address
             };
 
             _context.Properties.Add(property);
@@ -85,9 +100,16 @@ namespace RentalHub.Controllers
                 return NotFound("The renter is invalid");
             }
 
-            var property = await _context.Properties.FindAsync(propertyId);
+            var property = await _context.Properties.Include(p => p.Address).FirstOrDefaultAsync(p => p.Id == propertyId);
             if(property != null)
+            {
+                Address address = property.Address;
+                if (address != null)
+                {
+                    _context.Addresses.Remove(address);
+                }
                 _context.Properties.Remove(property);
+            }
             await _context.SaveChangesAsync();
 
             return Ok("property removed");

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RentalHub.Migrations
 {
-    public partial class CreateDatabase : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Adresses",
+                name: "Addresses",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -21,7 +21,7 @@ namespace RentalHub.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Adresses", x => x.Id);
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,31 +62,6 @@ namespace RentalHub.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.UniqueConstraint("AK_AspNetUsers_UserName", x => x.UserName);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Rentees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    AddressId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rentees", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rentees_Adresses_AddressId1",
-                        column: x => x.AddressId1,
-                        principalTable: "Adresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,18 +178,17 @@ namespace RentalHub.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    AddressId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AddressId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Profiles_Adresses_AddressId1",
-                        column: x => x.AddressId1,
-                        principalTable: "Adresses",
+                        name: "FK_Profiles_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Profiles_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -238,7 +212,7 @@ namespace RentalHub.Migrations
                         column: x => x.ProfileID,
                         principalTable: "Profiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -252,54 +226,53 @@ namespace RentalHub.Migrations
                     Type = table.Column<int>(type: "int", nullable: false),
                     BedRooms = table.Column<int>(type: "int", nullable: false),
                     Baths = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
-                    PropertyAddressId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AddressId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Available = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Properties", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Properties_Adresses_PropertyAddressId",
-                        column: x => x.PropertyAddressId,
-                        principalTable: "Adresses",
+                        name: "FK_Properties_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Properties_Profiles_ProfileId",
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Properties_Renters_RenterId",
                         column: x => x.RenterId,
                         principalTable: "Renters",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Adresses",
+                table: "Addresses",
                 columns: new[] { "Id", "AddressLine1", "AddressLine2", "City", "Country", "PostalCode", "Province" },
                 values: new object[,]
                 {
-                    { "8fb04a10-92c2-4633-9445-f02728a84906", "William", "Shakespeare", "Test City", "Test country", "Test code", "Test Pro" },
-                    { "b6d09d14-ddc9-4603-a804-3f724f182d10", "William", "Shakespeare", "Test City", "Test country", "Test code", "Test Pro" }
+                    { "44552fce-1a29-43ca-87f5-1a8196373931", "William", "Shakespeare", "Test City", "Test country", "Test code", "Test Pro" },
+                    { "b2deca16-e21b-4920-8702-3fcbd146b17a", "William", "Shakespeare", "Test City", "Test country", "Test code", "Test Pro" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Properties",
-                columns: new[] { "Id", "AddressId", "Available", "Baths", "BedRooms", "ProfileId", "PropertyAddressId", "RenterId", "Title", "Type" },
+                columns: new[] { "Id", "AddressId", "Available", "Baths", "BedRooms", "ProfileId", "RenterId", "Title", "Type" },
                 values: new object[,]
                 {
-                    { "a6ead585-4c16-42c7-876d-cfd3c6d3e574", 1, false, 1, 2, null, null, null, "Rancho Property", 0 },
-                    { "30221311-646c-40ed-9124-44928e710134", 2, false, 2, 3, null, null, null, "Succex Property", 1 },
-                    { "7f091dfc-e17a-4360-9a63-d9dfe3c06370", 1, true, 1, 1, null, null, null, "Globe Property", 0 },
-                    { "981b8062-4c76-4a68-8763-32fc876adfa3", 1, true, 3, 5, null, null, null, "Private Property", 3 },
-                    { "edbfafc2-f462-45ed-86e7-155339aace60", 1, true, 1, 2, null, null, null, "Public Property", 0 },
-                    { "24020ee8-7b8c-4dfe-b04c-7a7bebfbca41", 1, true, 2, 4, null, null, null, "Rancho Property", 2 },
-                    { "524680d1-29e1-4f69-b9d6-bde17e19466a", 1, true, 1, 2, null, null, null, "Rancho Property", 0 }
+                    { "a6dd3923-f6de-4e8c-9786-a0984260088c", null, false, 1, 2, null, null, "Rancho Property", 0 },
+                    { "f7ad186c-15f4-4839-b5d3-1a922e49a334", null, false, 2, 3, null, null, "Succex Property", 1 },
+                    { "6eaadee1-50a8-4164-979c-16ef30d0eaad", null, true, 1, 1, null, null, "Globe Property", 0 },
+                    { "a30ff900-43b8-43da-8f26-103a68faa02d", null, true, 3, 5, null, null, "Private Property", 3 },
+                    { "3db4609a-b352-49e8-9e2a-b24c2f4fe563", null, true, 1, 2, null, null, "Public Property", 0 },
+                    { "1c43a800-d970-4802-bd29-04af024674fd", null, true, 2, 4, null, null, "Rancho Property", 2 },
+                    { "8c717b9b-fbf6-49f8-aac9-333db3fd12c1", null, true, 1, 2, null, null, "Rancho Property", 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -347,9 +320,9 @@ namespace RentalHub.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Profiles_AddressId1",
+                name: "IX_Profiles_AddressId",
                 table: "Profiles",
-                column: "AddressId1");
+                column: "AddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",
@@ -357,24 +330,19 @@ namespace RentalHub.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Properties_AddressId",
+                table: "Properties",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Properties_ProfileId",
                 table: "Properties",
                 column: "ProfileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Properties_PropertyAddressId",
-                table: "Properties",
-                column: "PropertyAddressId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Properties_RenterId",
                 table: "Properties",
                 column: "RenterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Rentees_AddressId1",
-                table: "Rentees",
-                column: "AddressId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Renters_ProfileID",
@@ -403,9 +371,6 @@ namespace RentalHub.Migrations
                 name: "Properties");
 
             migrationBuilder.DropTable(
-                name: "Rentees");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -415,7 +380,7 @@ namespace RentalHub.Migrations
                 name: "Profiles");
 
             migrationBuilder.DropTable(
-                name: "Adresses");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

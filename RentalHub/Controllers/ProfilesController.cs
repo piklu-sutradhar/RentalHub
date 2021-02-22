@@ -27,12 +27,12 @@ namespace RentalHub.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
+        /*[Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateProfile([FromBody] Profile model)
         {
             return Ok();
-        }
+        }*/
         // GET: api/Profiles/5
         [Authorize]
         [HttpGet("{userId}")]
@@ -47,7 +47,7 @@ namespace RentalHub.Controllers
 
 
 
-            return  new ProfileViewModel
+            return  new ProfileModel
             {
                 Id = profile.Id,
                 FirstName = profile.FirstName,
@@ -67,14 +67,35 @@ namespace RentalHub.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProfile(string id, Profile profile)
+        public async Task<IActionResult> PutProfile(string id, ProfileViewModel profile)
         {
-            if (id != profile.Id)
+            /*if (id != profile.Id)
             {
                 return BadRequest();
+            }*/
+
+            Profile profileInTheDB = await _context.Profiles.FindAsync(id);
+
+            if(profileInTheDB == null)
+            {
+                return NotFound("The profile does not exists");
             }
 
-            _context.Entry(profile).State = EntityState.Modified;
+            var address = new Address { 
+                Id = Guid.NewGuid().ToString(),
+                AddressLine1 = profile.AddressLine1,
+                AddressLine2 = profile.AddressLine2,
+                City = profile.City,
+                Province = profile.Province,
+                Country = profile.Country,
+                PostalCode = profile.PostalCode
+            };
+
+            profileInTheDB.FirstName = profile.FirstName;
+            profileInTheDB.LastName = profile.LastName;
+            profileInTheDB.Address = address;
+
+            _context.Entry(profileInTheDB).State = EntityState.Modified;
 
             try
             {
@@ -127,20 +148,29 @@ namespace RentalHub.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Profile>> DeleteProfile(string id)
         {
-            var profile = await _context.Profiles.FindAsync(id);
+            var profile = await _context.Profiles.Include(p => p.Address).FirstOrDefaultAsync(p => p.Id == id);
+            //var renter = await _context.Renters.Where(r => r.ProfileID == id).FirstOrDefaultAsync();
             if (profile == null)
             {
                 return NotFound();
             }
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
 
-            var renter = await _context.Renters.Where(r => r.ProfileID == profile.Id).FirstOrDefaultAsync();
+            /*var renter = await _context.Renters.Where(r => r.ProfileID == profile.Id).FirstOrDefaultAsync();
             if(renter != null)
             {
                 _context.Renters.Remove(renter);
                 await _context.SaveChangesAsync();
             }
+
+            _context.Profiles.Remove(profile);
+            await _context.SaveChangesAsync();*/
+            Address address = profile.Address;
+            if (address != null)
+            {
+                _context.Addresses.Remove(address);
+                await _context.SaveChangesAsync();
+            }
+
             var user = await _userManager.FindByIdAsync(profile.UserId);
             await _userManager.DeleteAsync(user);
 

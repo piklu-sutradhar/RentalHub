@@ -110,13 +110,13 @@ namespace RentalHub.Controllers
                 }
                 var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JwtSecret")));
 
-                var token = new JwtSecurityToken(
+                /*var token = new JwtSecurityToken(
                     issuer : Environment.GetEnvironmentVariable("JwtValidIssuer"),
                     audience : Environment.GetEnvironmentVariable("JwtValidAudience"),
                     expires : DateTime.Now.AddHours(1),
                     claims : authClaims,
                     signingCredentials : new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha512Signature)
-                    );
+                    );*/
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {

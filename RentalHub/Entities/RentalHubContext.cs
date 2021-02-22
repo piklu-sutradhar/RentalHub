@@ -21,9 +21,9 @@ namespace RentalHub.Entities
         }
         //entities
         public DbSet<Renter> Renters { get; set; }
-        public DbSet<Rentee> Rentees { get; set; }
+        //public DbSet<Rentee> Rentees { get; set; }
         public DbSet<Property> Properties { get; set; }
-        public DbSet<Address> Adresses { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Profile> Profiles { get; set; }
 
@@ -46,6 +46,10 @@ namespace RentalHub.Entities
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<User>().HasIndex(u => u.Email);
             modelBuilder.Entity<User>().HasAlternateKey(u => u.UserName);
+
+            modelBuilder.Entity<Profile>().HasIndex(u => u.UserId).IsUnique();
+            modelBuilder.Entity<Renter>().HasIndex(u => u.ProfileID).IsUnique();
+
             modelBuilder.Seed();
         }
 

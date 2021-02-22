@@ -180,12 +180,12 @@ namespace RentalHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Addresses");
 
                     b.HasData(
                         new
                         {
-                            Id = "c4eb1b0b-1a20-425f-ba09-513bc99b137f",
+                            Id = "44552fce-1a29-43ca-87f5-1a8196373931",
                             AddressLine1 = "William",
                             AddressLine2 = "Shakespeare",
                             City = "Test City",
@@ -195,7 +195,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "74ce797c-8235-4386-864e-43066e33b34b",
+                            Id = "b2deca16-e21b-4920-8702-3fcbd146b17a",
                             AddressLine1 = "William",
                             AddressLine2 = "Shakespeare",
                             City = "Test City",
@@ -210,10 +210,7 @@ namespace RentalHub.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AddressId1")
+                    b.Property<string>("AddressId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
@@ -230,7 +227,7 @@ namespace RentalHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId1");
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
@@ -279,7 +276,7 @@ namespace RentalHub.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "43d43624-f469-4c4e-8896-8a2259401e1a",
+                            Id = "a6dd3923-f6de-4e8c-9786-a0984260088c",
                             Available = false,
                             Baths = 1,
                             BedRooms = 2,
@@ -288,7 +285,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "642577bf-49fb-494c-8795-f6dc40550b65",
+                            Id = "f7ad186c-15f4-4839-b5d3-1a922e49a334",
                             Available = false,
                             Baths = 2,
                             BedRooms = 3,
@@ -297,7 +294,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "70f53669-7b0f-40f2-b00e-aa772ddddbca",
+                            Id = "6eaadee1-50a8-4164-979c-16ef30d0eaad",
                             Available = true,
                             Baths = 1,
                             BedRooms = 1,
@@ -306,7 +303,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "470a560c-0512-43ab-8547-34b78522c6d2",
+                            Id = "a30ff900-43b8-43da-8f26-103a68faa02d",
                             Available = true,
                             Baths = 3,
                             BedRooms = 5,
@@ -315,7 +312,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "22f8a51f-8190-4dca-9a10-1b78605f09a9",
+                            Id = "3db4609a-b352-49e8-9e2a-b24c2f4fe563",
                             Available = true,
                             Baths = 1,
                             BedRooms = 2,
@@ -324,7 +321,7 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "4f9466c8-a19e-43b0-b159-d59c6d414c66",
+                            Id = "1c43a800-d970-4802-bd29-04af024674fd",
                             Available = true,
                             Baths = 2,
                             BedRooms = 4,
@@ -333,48 +330,13 @@ namespace RentalHub.Migrations
                         },
                         new
                         {
-                            Id = "9b58b286-5f0d-4359-a7fc-6cbf44972e85",
+                            Id = "8c717b9b-fbf6-49f8-aac9-333db3fd12c1",
                             Available = true,
                             Baths = 1,
                             BedRooms = 2,
                             Title = "Rancho Property",
                             Type = 0
                         });
-                });
-
-            modelBuilder.Entity("RentalHub.Entities.Rentee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AddressId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId1");
-
-                    b.ToTable("Rentees");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Renter", b =>
@@ -517,7 +479,7 @@ namespace RentalHub.Migrations
                 {
                     b.HasOne("RentalHub.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId1");
+                        .HasForeignKey("AddressId");
 
                     b.HasOne("RentalHub.Entities.User", "User")
                         .WithMany()
@@ -532,7 +494,7 @@ namespace RentalHub.Migrations
 
             modelBuilder.Entity("RentalHub.Entities.Property", b =>
                 {
-                    b.HasOne("RentalHub.Entities.Address", "PropertyAddress")
+                    b.HasOne("RentalHub.Entities.Address", "Address")
                         .WithMany()
                         .HasForeignKey("AddressId");
 
@@ -544,20 +506,11 @@ namespace RentalHub.Migrations
                         .WithMany("Properties")
                         .HasForeignKey("RenterId");
 
-                    b.Navigation("PropertyAddress");
+                    b.Navigation("Address");
 
                     b.Navigation("Rentee");
 
                     b.Navigation("Renter");
-                });
-
-            modelBuilder.Entity("RentalHub.Entities.Rentee", b =>
-                {
-                    b.HasOne("RentalHub.Entities.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId1");
-
-                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("RentalHub.Entities.Renter", b =>
