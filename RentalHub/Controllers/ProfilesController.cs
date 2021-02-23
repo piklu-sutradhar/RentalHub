@@ -74,14 +74,25 @@ namespace RentalHub.Controllers
                 return BadRequest();
             }*/
 
-            Profile profileInTheDB = await _context.Profiles.FindAsync(id);
+            Profile profileInTheDB = await _context.Profiles.Include(p => p.Address).FirstOrDefaultAsync(p => p.Id == id);
 
             if(profileInTheDB == null)
             {
                 return NotFound("The profile does not exists");
             }
 
-            var address = new Address { 
+
+            if(profileInTheDB.AddressId != null)
+            {
+                _context.Addresses.Remove(profileInTheDB.Address);
+                await _context.SaveChangesAsync();
+            }
+
+
+            profileInTheDB.FirstName = profile.FirstName;
+            profileInTheDB.LastName = profile.LastName;
+            profileInTheDB.Address = new Address
+            {
                 Id = Guid.NewGuid().ToString(),
                 AddressLine1 = profile.AddressLine1,
                 AddressLine2 = profile.AddressLine2,
@@ -90,10 +101,6 @@ namespace RentalHub.Controllers
                 Country = profile.Country,
                 PostalCode = profile.PostalCode
             };
-
-            profileInTheDB.FirstName = profile.FirstName;
-            profileInTheDB.LastName = profile.LastName;
-            profileInTheDB.Address = address;
 
             _context.Entry(profileInTheDB).State = EntityState.Modified;
 

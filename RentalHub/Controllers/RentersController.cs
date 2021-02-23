@@ -107,11 +107,12 @@ namespace RentalHub.Controllers
                 if (address != null)
                 {
                     _context.Addresses.Remove(address);
+                    await _context.SaveChangesAsync();
                 }
                 _context.Properties.Remove(property);
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
-
+           
             return Ok("property removed");
         }
 
