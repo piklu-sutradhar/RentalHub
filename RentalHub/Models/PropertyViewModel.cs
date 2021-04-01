@@ -9,11 +9,13 @@ namespace RentalHub.Models
 {
     public class PropertyViewModel
     {
+        public string Id { get; set; }
         public string Title { get; set; }
         public string ProfileId { get; set; }
         public PropertyType Type { get; set; }
         public int BedRooms { get; set; }
         public int Baths { get; set; }
+        public string AddressId { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }

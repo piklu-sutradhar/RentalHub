@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentalHub.Entities;
+using RentalHub.Models;
 
 namespace RentalHub.Controllers
 {
@@ -53,14 +54,29 @@ namespace RentalHub.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProperty(string id, Property @property)
+        public async Task<IActionResult> PutProperty(string id, PropertyViewModel propertyViewModel)
         {
-            if (id != @property.Id)
+            Property _property = await _context.Properties.Include(p => p.Address).FirstOrDefaultAsync(p => p.Id == id);
+
+            if (_property == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(@property).State = EntityState.Modified;
+            _property.Title = propertyViewModel.Title;
+            _property.Type = propertyViewModel.Type;
+            _property.BedRooms = propertyViewModel.BedRooms;
+            _property.Baths = propertyViewModel.Baths;
+            _property.Available = propertyViewModel.Available;
+            _property.Address.AddressLine1 = propertyViewModel.AddressLine1;
+            _property.Address.AddressLine2 = propertyViewModel.AddressLine2;
+            _property.Address.City = propertyViewModel.City;
+            _property.Address.Province = propertyViewModel.Province;
+            _property.Address.Country = propertyViewModel.Country;
+            _property.Address.PostalCode = propertyViewModel.PostalCode;
+
+
+            _context.Entry(_property).State = EntityState.Modified;
 
             try
             {

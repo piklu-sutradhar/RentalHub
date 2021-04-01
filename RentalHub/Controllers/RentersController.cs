@@ -45,6 +45,7 @@ namespace RentalHub.Controllers
             {
                 if(property.ProfileId != null)
                     property.Rentee = await _context.Profiles.FindAsync(property.ProfileId);
+                property.Address = await _context.Addresses.FindAsync(property.AddressId);
             }
             return renter;
         }

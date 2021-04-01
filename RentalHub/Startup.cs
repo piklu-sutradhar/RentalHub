@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Certificate;
 
 namespace RentalHub
 {
@@ -49,12 +50,15 @@ namespace RentalHub
                 );
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<RentalHubContext>().AddDefaultTokenProviders();
+            /*services.AddAuthentication(
+                CertificateAuthenticationDefaults.AuthenticationScheme)
+                .AddCertificate();*/
 
             services.AddAuthentication(option => {
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+        })
                 .AddJwtBearer( options =>
                 {
                     options.SaveToken = true;
